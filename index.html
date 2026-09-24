@@ -1458,10 +1458,17 @@
 
         function shareApp() {
             const shareData = {
-                title: 'ASTT E-Sport — Application Tarnos',
-                text: 'Rejoins l\'application officielle ASTT E-Sport ! Suis les tournois en direct, l\'ordre des matchs et les diffusions WebTV entre collègues.',
+                title: 'ASTT E-Sport - Application Tarnos',
+                text: "Rejoins l'application officielle ASTT E-Sport ! Suis les tournois en direct, l'ordre des matchs et les diffusions WebTV entre collègues.",
                 url: 'https://esportastt-bot.github.io/astt-app/'
             };
+            
+            if (navigator.share) {
+                navigator.share(shareData).catch(err => console.log(err));
+            } else {
+                copyLink();
+            }
+        };
             
             if (navigator.share) {
                 navigator.share(shareData).catch(err => console.log(err));
