@@ -121,29 +121,31 @@
 
         .logo-wrapper {
             position: relative;
-            width: 46px;
-            height: 46px;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-right: 15px;
         }
 
         .logo-wrapper canvas {
             position: absolute;
-            top: -15px;
-            left: -15px;
-            width: 76px;
-            height: 76px;
+            top: -30px;
+            left: -30px;
+            width: 140px;
+            height: 140px;
             pointer-events: none;
         }
 
         .brand img {
-            width: 36px;
-            height: 36px;
+            width: 60px;
+            height: 60px;
             object-fit: contain;
             position: relative;
             z-index: 2;
-            filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.8));
+            filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.9));
+            animation: float 4s ease-in-out infinite;
         }
 
         .brand-title {
@@ -1415,7 +1417,7 @@
         }
 
         window.addEventListener('load', () => {
-            new 3DConstellationEffect('navConstellationCanvas', 28);
+            new 3DConstellationEffect('navConstellationCanvas', 55);
             new 3DConstellationEffect('heroConstellationCanvas', 115);
             new 3DConstellationEffect('footerConstellationCanvas', 45);
         });
