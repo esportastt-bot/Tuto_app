@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ASTT E-Sport — L'Application Officielle Safran Helicopter Engines</title>
+    <title>ASTT E-Sport — L'Application Officielle Tarnos</title>
     <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -78,14 +78,18 @@
 
         /* ANIMATIONS AU SCROLL */
         .animate-on-scroll {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            animation: fadeInUp 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
         }
 
-        .animate-on-scroll.is-visible {
-            opacity: 1;
-            transform: translateY(0);
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* HEADER & NAVBAR */
@@ -899,7 +903,7 @@
                 </div>
                 <div class="brand-text-group">
                     <span class="brand-title">ASTT E-SPORT</span>
-                    <span class="brand-sub">Safran Helicopter Engines</span>
+                    <span class="brand-sub">Tarnos</span>
                 </div>
             </a>
             <div class="nav-links">
@@ -927,20 +931,20 @@
                 <i class="fas fa-mobile-screen-button"></i> Application Officielle ASTT E-Sport
             </div>
             
-            <h1>L'E-Sport à <span class="bleu">Safran</span>, à portée de <span class="orange">main</span> !</h1>
+            <h1>L'E-Sport à <span class="bleu">Tarnos</span>, à portée de <span class="orange">main</span> !</h1>
             
             <p class="lead">
                 Suivez en direct nos WebTV Twitch, inscrivez-vous aux tournois, consultez l'ordre de passage des matchs et les scores map par map en temps réel. Une application créée par et pour l'association sportive de l'entreprise !
             </p>
         </section>
 
-        <!-- SAFRAN HELICOPTER ENGINES CONTEXT CARD -->
+        <!--  CONTEXT CARD -->
         <div id="about" class="safran-card animate-on-scroll">
             <div class="safran-icon">
                 <i class="fas fa-building-user"></i>
             </div>
             <div class="safran-text">
-                <h3>Une application pensée pour les salariés de Safran Tarnos</h3>
+                <h3>Une application pensée pour les salariés de Tarnos</h3>
                 <p>
                     La section <strong>E-sport</strong> fait partie intégrante de l'<strong>ASTT</strong> (Association Sportive de Turbomeca Tarnos). 
                     <br><br>
@@ -1024,7 +1028,7 @@
                         <i class="fab fa-twitch"></i>
                     </div>
                     <div>
-                        <div class="flutter-live-title">CHAMPIONNAT SAFRAN TARNOS — LIVE CAST</div>
+                        <div class="flutter-live-title">CHAMPIONNAT TARNOS — LIVE CAST</div>
                         <div class="flutter-live-desc">Le tournoi est diffusé en direct. Retrouvez les casteurs ASTT sur la WebTV !</div>
                     </div>
                 </div>
@@ -1161,7 +1165,7 @@
                         <div class="match-teams">
                             <span style="text-align: right;">Équipe Rotor Tarnos</span>
                             <span class="vs">VS</span>
-                            <span style="text-align: left;">Safran Warriors</span>
+                            <span style="text-align: left;">Tarnos Warriors</span>
                         </div>
                         <div class="match-details" style="color: var(--orange); text-align: center;">
                             Ce match se jouera à la suite du Match 1.
@@ -1213,7 +1217,7 @@
             <img src="logo.png" alt="Logo ASTT">
         </div>
         <p style="font-weight: 800; color: #fff; margin-bottom: 6px; font-family: 'Chakra Petch', sans-serif; font-size: 1.15rem;">
-            ASTT E-SPORT — SAFRAN HELICOPTER ENGINES (TARNOS)
+            ASTT E-SPORT —  (TARNOS)
         </p>
         <p style="font-size: 0.88rem; color: var(--text-muted);">
             Association Sportive de Turbomeca Tarnos. Tous droits réservés.
@@ -1450,7 +1454,7 @@
 
         function shareApp() {
             const shareData = {
-                title: 'ASTT E-Sport — Application Safran Helicopter Engines',
+                title: 'ASTT E-Sport — Application Tarnos',
                 text: 'Rejoins l\'application officielle ASTT E-Sport ! Suis les tournois en direct, l\'ordre des matchs et les diffusions WebTV entre collègues.',
                 url: 'https://esportastt-bot.github.io/astt-app/'
             };
@@ -1473,3 +1477,4 @@
     </script>
 </body>
 </html>
+
