@@ -69,37 +69,25 @@
             text-decoration: none; color: #fff;
         }
 
-        /* LOGO WRAPPER — grand avec constellation visible */
+        /* LOGO NAV — simple, sans constellation */
         .logo-wrapper {
-            position: relative;
-            width: 90px;
-            height: 90px;
+            width: 55px;
+            height: 55px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
-        .logo-wrapper canvas#navConstellationCanvas {
-            position: absolute;
-            top: -25px;
-            left: -25px;
-            width: 140px;
-            height: 140px;
-            pointer-events: none;
-            z-index: 1;
-        }
         .logo-wrapper img {
-            width: 65px;
-            height: 65px;
+            width: 55px;
+            height: 55px;
             object-fit: contain;
-            position: relative;
-            z-index: 2;
-            filter: drop-shadow(0 0 14px rgba(0, 212, 255, 0.95));
+            filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.9));
             animation: float 4s ease-in-out infinite;
         }
         @keyframes float {
             0%   { transform: translateY(0px); }
-            50%  { transform: translateY(-8px); }
+            50%  { transform: translateY(-7px); }
             100% { transform: translateY(0px); }
         }
 
@@ -140,18 +128,18 @@
             margin-bottom: 45px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         .hero-logo-box {
-            position: relative; width: 180px; height: 180px;
+            position: relative; width: 320px; height: 320px;
             margin: 0 auto 20px;
             display: flex; align-items: center; justify-content: center;
         }
         .hero-logo-box canvas {
-            position: absolute; top: -60px; left: -60px;
-            width: 300px; height: 300px; pointer-events: none;
+            position: absolute; top: -45px; left: -45px;
+            width: 410px; height: 410px; pointer-events: none;
         }
         .hero-logo-img {
-            width: 135px; height: 135px; object-fit: contain;
+            width: 270px; height: 270px; object-fit: contain;
             position: relative; z-index: 2;
-            filter: drop-shadow(0 0 25px rgba(0, 212, 255, 0.9));
+            filter: drop-shadow(0 0 35px rgba(0, 212, 255, 0.9));
             animation: float 4s ease-in-out infinite;
         }
         .hero-tag {
@@ -432,7 +420,6 @@
         <div class="nav-container">
             <a href="#" class="brand">
                 <div class="logo-wrapper">
-                    <canvas id="navConstellationCanvas"></canvas>
                     <img src="logo.png" alt="Logo ASTT E-Sport">
                 </div>
                 <div>
@@ -542,7 +529,7 @@
                         <div class="flutter-live-desc">Le tournoi EVA est diffusé en direct. Retrouvez les casteurs ASTT sur la WebTV !</div>
                     </div>
                 </div>
-                <button class="flutter-btn-cyan" onclick="window.open('https://twitch.tv','_blank')">REJOINDRE LE STREAM TWITCH</button>
+                <div style="text-align:center; font-size:0.82rem; color:rgba(255,255,255,0.55); font-style:italic; margin-top:8px;">Le bouton s'affichera ici quand le live sera actif.</div>
             </div>
 
             <!-- BLOC 3 : TUILES PROGRAMMÉES -->
@@ -581,10 +568,7 @@
             <div class="ts-mockup">
                 <div class="ts-header">
                     <div class="ts-dropdown">Tournoi EVA - Niveau Débutant (En cours) <i class="fas fa-chevron-down"></i></div>
-                    <button class="flutter-btn-cyan" style="background:rgba(255,0,0,0.15); border:1px solid rgba(255,0,0,0.5); color:#FF3B30; box-shadow:none; max-width:320px; margin:0 auto; display:flex; align-items:center; justify-content:center; gap:10px;">
-                        <i class="fab fa-youtube" style="font-size:1.2rem;"></i> REVOIR LE CAST (YOUTUBE)
-                    </button>
-                    <div style="font-size:0.75rem; color:var(--text-muted); margin-top:8px; font-style:italic;">* Ce bouton s'active une fois le live terminé.</div>
+<div style="font-size:0.82rem; color:rgba(255,255,255,0.55); font-style:italic; margin-top:6px;">Le bouton Revoir le Cast apparaît ici une fois le tournoi terminé.</div>
                 </div>
                 <div class="ts-tabbar">
                     <div class="ts-tab active" id="tab-rank" onclick="switchTsTab('rank')">CLASSEMENT</div>
@@ -650,14 +634,7 @@
             <p style="max-width:650px; margin:0 auto 25px; font-size:1.05rem;">
                 Rejoignez notre serveur Discord pour former des équipes EVA, discuter des tournois, ou participez aux échanges en direct lors des diffusions Twitch !
             </p>
-            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
-                <a href="https://twitch.tv" target="_blank" class="btn-share" style="background:var(--twitch-purple); color:#fff; text-decoration:none;">
-                    <i class="fab fa-twitch"></i> WebTV Twitch
-                </a>
-                <a href="https://discord.gg" target="_blank" class="btn-share" style="background:#5865F2; color:#fff; text-decoration:none;">
-                    <i class="fab fa-discord"></i> Serveur Discord
-                </a>
-            </div>
+<div style="font-size:0.95rem; color:rgba(255,255,255,0.55); font-style:italic;">Les liens de la communauté seront partagés dans l'application.</div>
         </div>
 
     </div>
@@ -665,7 +642,6 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-logo-box">
-            <canvas id="footerConstellationCanvas"></canvas>
             <img src="logo.png" alt="Logo ASTT">
         </div>
         <p style="font-weight:800; color:#fff; margin-bottom:6px; font-family:'Chakra Petch', sans-serif; font-size:1.15rem;">
@@ -772,11 +748,11 @@
             requestAnimationFrame(this._loop);
         }
         ConstellationEffect3D.prototype._loop = function(timestamp) {
-            this.time = timestamp * 0.0005;
+            this.time = timestamp * 0.00006;
             var ctx = this.ctx;
             ctx.clearRect(0, 0, this.width, this.height);
             var cx = this.width / 2, cy = this.height / 2;
-            var rotY = this.time * 1.5, rotX = this.time * 0.5, rotZ = this.time * 0.2;
+            var rotY = this.time * 1.5, rotX = this.time * 0.4, rotZ = this.time * 0.1;
             var projected = [];
             for (var i = 0; i < this.vertices.length; i++) {
                 var v = this.vertices[i];
@@ -830,9 +806,7 @@
         };
 
         window.addEventListener('load', function() {
-            new ConstellationEffect3D('navConstellationCanvas', 55);
-            new ConstellationEffect3D('heroConstellationCanvas', 115);
-            new ConstellationEffect3D('footerConstellationCanvas', 45);
+            new ConstellationEffect3D('heroConstellationCanvas', 90);
         });
 
         /* ===================================================
