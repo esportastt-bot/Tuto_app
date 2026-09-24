@@ -529,7 +529,7 @@
                         <div class="flutter-live-desc">Le tournoi EVA est diffusé en direct. Retrouvez les casteurs ASTT sur la WebTV !</div>
                     </div>
                 </div>
-                <div style="text-align:center; font-size:0.82rem; color:rgba(255,255,255,0.55); font-style:italic; margin-top:8px;">Le bouton s'affichera ici quand le live sera actif.</div>
+                <button class="flutter-btn-cyan">REJOINDRE LE STREAM TWITCH</button>
             </div>
 
             <!-- BLOC 3 : TUILES PROGRAMMÉES -->
@@ -748,7 +748,7 @@
             requestAnimationFrame(this._loop);
         }
         ConstellationEffect3D.prototype._loop = function(timestamp) {
-            this.time = timestamp * 0.00006;
+            this.time = timestamp * 0.00018;
             var ctx = this.ctx;
             ctx.clearRect(0, 0, this.width, this.height);
             var cx = this.width / 2, cy = this.height / 2;
@@ -806,7 +806,7 @@
         };
 
         window.addEventListener('load', function() {
-            new ConstellationEffect3D('heroConstellationCanvas', 90);
+            new ConstellationEffect3D('heroConstellationCanvas', 117);
         });
 
         /* ===================================================
