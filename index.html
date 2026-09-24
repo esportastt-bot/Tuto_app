@@ -8,19 +8,19 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #07090E;
-            --panel-bg: #0F141F;
-            --panel-border: rgba(0, 212, 255, 0.18);
-            --card-bg: rgba(18, 24, 38, 0.85);
+            --bg-dark: #0F1115;
+            --panel-bg: #161D2B;
+            --panel-border: rgba(0, 212, 255, 0.2);
+            --card-bg: rgba(22, 29, 43, 0.75);
             --bleu: #00D4FF;
-            --bleu-glow: rgba(0, 212, 255, 0.4);
-            --orange: #FF7700;
-            --orange-glow: rgba(255, 119, 0, 0.4);
+            --bleu-glow: rgba(0, 212, 255, 0.5);
+            --orange: #FF8C00;
+            --orange-glow: rgba(255, 140, 0, 0.5);
+            --twitch-purple: #9146FF;
             --vert: #22C55E;
-            --rouge: #EF4444;
-            --text-main: #F1F5F9;
+            --rouge: #FF3B30;
+            --text-main: #FFFFFF;
             --text-muted: #94A3B8;
-            --safran-red: #E2001A;
         }
 
         * {
@@ -35,11 +35,59 @@
             color: var(--text-main);
             line-height: 1.6;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* BACKGROUND IMMERSIF AVEC IMAGE FOND.PNG ET CANVAS D'ETINCELLES */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            background: url('Fond.png') no-repeat center center / cover;
+            filter: brightness(0.35) contrast(1.1);
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            background: 
+                radial-gradient(circle at 15% 20%, rgba(0, 212, 255, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(255, 140, 0, 0.15) 0%, transparent 55%),
+                linear-gradient(180deg, rgba(15, 17, 21, 0.75) 0%, rgba(15, 17, 21, 0.95) 100%);
+            pointer-events: none;
+        }
+
+        /* GRILLE DE CYBERSPACE (COMPOSANT GRIDPAINTER DE L'APP) */
+        .grid-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-size: 30px 30px;
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(0, 212, 255, 0.08) 0%, transparent 45%),
-                radial-gradient(circle at 90% 50%, rgba(255, 119, 0, 0.07) 0%, transparent 50%),
-                radial-gradient(circle at 50% 90%, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
-            background-attachment: fixed;
+                linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+            pointer-events: none;
+        }
+
+        /* PARTICULES CANVAS */
+        #embersCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
         }
 
         /* HEADER & NAVBAR */
@@ -47,7 +95,7 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(7, 9, 14, 0.9);
+            background: rgba(15, 17, 21, 0.85);
             backdrop-filter: blur(16px);
             border-bottom: 1px solid var(--panel-border);
             padding: 12px 24px;
@@ -67,13 +115,12 @@
             gap: 15px;
             text-decoration: none;
             color: #fff;
-            position: relative;
         }
 
         .logo-wrapper {
             position: relative;
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -81,26 +128,20 @@
 
         .logo-wrapper canvas {
             position: absolute;
-            top: -16px;
-            left: -16px;
-            width: 80px;
-            height: 80px;
+            top: -15px;
+            left: -15px;
+            width: 76px;
+            height: 76px;
             pointer-events: none;
-            z-index: 1;
         }
 
         .brand img {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             object-fit: contain;
             position: relative;
             z-index: 2;
             filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
-        }
-
-        .brand-text-group {
-            display: flex;
-            flex-direction: column;
         }
 
         .brand-title {
@@ -159,63 +200,62 @@
             box-shadow: 0 0 25px rgba(0, 212, 255, 0.7);
         }
 
-        /* CONTAINER GENERAL */
+        /* CONTAINER PRINCIPAL */
         .container {
             max-width: 1150px;
             margin: 0 auto;
             padding: 40px 20px;
         }
 
-        /* HERO BANNER AVEC LOGO CONSTELLATION XXL */
+        /* HERO SECTION AVEC LOGO CONSTELLATION 3D SPECIALE */
         .hero {
             text-align: center;
-            padding: 60px 24px 50px;
-            background: radial-gradient(ellipse at top, rgba(0, 212, 255, 0.15), transparent 70%);
+            padding: 50px 24px 45px;
+            background: rgba(22, 29, 43, 0.55);
+            backdrop-filter: blur(12px);
             border-radius: 28px;
             border: 1px solid var(--panel-border);
-            margin-bottom: 50px;
+            margin-bottom: 45px;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
-        .hero-logo-container {
+        .hero-logo-box {
             position: relative;
             width: 180px;
             height: 180px;
-            margin: 0 auto 25px;
+            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        .hero-logo-container canvas {
+        .hero-logo-box canvas {
             position: absolute;
             top: -60px;
             left: -60px;
             width: 300px;
             height: 300px;
             pointer-events: none;
-            z-index: 1;
         }
 
         .hero-logo-img {
-            width: 130px;
-            height: 130px;
+            width: 135px;
+            height: 135px;
             object-fit: contain;
             position: relative;
             z-index: 2;
-            filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.8));
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.85));
         }
 
         .hero-tag {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(0, 212, 255, 0.1);
-            border: 1px solid rgba(0, 212, 255, 0.3);
+            background: rgba(0, 212, 255, 0.12);
+            border: 1px solid rgba(0, 212, 255, 0.35);
             color: var(--bleu);
-            padding: 7px 18px;
+            padding: 7px 20px;
             border-radius: 50px;
             font-size: 0.82rem;
             font-weight: 800;
@@ -229,76 +269,72 @@
             font-size: 2.8rem;
             font-weight: 800;
             color: #fff;
-            margin-bottom: 15px;
+            margin-bottom: 16px;
             line-height: 1.25;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.8);
         }
 
-        .hero h1 span.highlight-orange {
-            color: var(--orange);
-            text-shadow: 0 0 20px var(--orange-glow);
-        }
-
-        .hero h1 span.highlight-bleu {
-            color: var(--bleu);
-            text-shadow: 0 0 20px var(--bleu-glow);
-        }
+        .hero h1 span.bleu { color: var(--bleu); text-shadow: 0 0 20px var(--bleu-glow); }
+        .hero h1 span.orange { color: var(--orange); text-shadow: 0 0 20px var(--orange-glow); }
 
         .hero p.lead {
-            max-width: 800px;
+            max-width: 820px;
             margin: 0 auto 30px;
-            color: var(--text-muted);
-            font-size: 1.12rem;
+            color: #CBD5E1;
+            font-size: 1.1rem;
             line-height: 1.7;
         }
 
-        /* CONTEXT BOX: SAFRAN & ASTT */
-        .context-badge-card {
-            background: linear-gradient(135deg, rgba(15, 20, 31, 0.9), rgba(20, 28, 45, 0.9));
-            border: 1px solid rgba(0, 212, 255, 0.25);
+        /* SAFRAN & ASTT CONTEXT CARD */
+        .safran-card {
+            background: linear-gradient(135deg, rgba(22, 29, 43, 0.9), rgba(15, 21, 33, 0.9));
+            border: 1px solid rgba(0, 212, 255, 0.3);
             border-left: 5px solid var(--bleu);
-            border-radius: 16px;
-            padding: 24px 30px;
+            border-radius: 20px;
+            padding: 28px 32px;
             margin-bottom: 50px;
             display: flex;
             align-items: center;
             gap: 25px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(12px);
         }
 
-        .context-icon {
+        .safran-icon {
             font-size: 2.8rem;
             color: var(--bleu);
-            background: rgba(0, 212, 255, 0.1);
+            background: rgba(0, 212, 255, 0.12);
             width: 75px;
             height: 75px;
-            border-radius: 18px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
         }
 
-        .context-text h3 {
+        .safran-text h3 {
             font-family: 'Chakra Petch', sans-serif;
             color: #fff;
-            font-size: 1.3rem;
-            margin-bottom: 6px;
+            font-size: 1.35rem;
+            margin-bottom: 8px;
         }
 
-        .context-text p {
-            color: var(--text-muted);
-            font-size: 0.96rem;
-            line-height: 1.6;
+        .safran-text p {
+            color: #CBD5E1;
+            font-size: 0.98rem;
+            line-height: 1.65;
         }
 
-        .context-text strong {
+        .safran-text strong {
             color: #fff;
         }
 
-        /* BANNIERE PARRAINAGE & BOUCHE-A-OREILLE */
+        /* BANNIERE BOUCHE-A-OREILLE */
         .share-box {
-            background: linear-gradient(135deg, rgba(255, 119, 0, 0.16), rgba(0, 212, 255, 0.16));
-            border: 1px solid rgba(255, 119, 0, 0.4);
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.18), rgba(0, 212, 255, 0.18));
+            border: 1px solid rgba(255, 140, 0, 0.4);
             border-radius: 20px;
             padding: 28px 32px;
             display: flex;
@@ -307,7 +343,8 @@
             justify-content: space-between;
             gap: 24px;
             margin-bottom: 60px;
-            box-shadow: 0 12px 35px rgba(255, 119, 0, 0.15);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
         }
 
         .share-info {
@@ -331,7 +368,7 @@
         }
 
         .share-info p {
-            color: #CBD5E1;
+            color: #E2E8F0;
             font-size: 0.98rem;
             line-height: 1.6;
         }
@@ -357,12 +394,13 @@
             transition: all 0.25s;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            box-shadow: 0 0 18px var(--orange-glow);
         }
 
         .btn-share:hover {
-            background: #ff8800;
+            background: #ffa01c;
             transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--orange-glow);
+            box-shadow: 0 0 25px var(--orange-glow);
         }
 
         .btn-copy-link {
@@ -386,7 +424,7 @@
             color: var(--bleu);
         }
 
-        /* TITRES DE SECTION */
+        /* SECTION TITLES */
         .section-header {
             margin-bottom: 35px;
             text-align: left;
@@ -409,329 +447,249 @@
             font-weight: 800;
         }
 
-        /* GRILLE DE FONCTIONNALITES */
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-            gap: 28px;
-            margin-bottom: 65px;
+        /* MOCKUPS FIDÈLES DE L'APP FLUTTER */
+        .app-phone-container {
+            background: rgba(15, 17, 21, 0.85);
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            padding: 30px;
+            margin-bottom: 60px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
         }
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 20px;
-            padding: 30px;
-            backdrop-filter: blur(12px);
+        /* MOCKUP FLUTTER GLASS CARD */
+        .flutter-glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            position: relative;
+            margin-bottom: 20px;
             transition: all 0.3s ease;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(0, 212, 255, 0.45);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-        }
-
-        .card-icon {
-            width: 55px;
-            height: 55px;
-            border-radius: 16px;
-            background: rgba(0, 212, 255, 0.12);
-            color: var(--bleu);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 22px;
-        }
-
-        .card-icon.orange {
-            background: rgba(255, 119, 0, 0.12);
-            color: var(--orange);
-        }
-
-        .card-icon.green {
-            background: rgba(34, 197, 94, 0.12);
-            color: var(--vert);
-        }
-
-        .card h3 {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 1.35rem;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .card p {
-            color: var(--text-muted);
-            font-size: 0.96rem;
-            line-height: 1.65;
-        }
-
-        /* CONTENEUR SHOWCASE INTERACTIF */
-        .showcase-container {
-            background: var(--panel-bg);
-            border: 1px solid var(--panel-border);
-            border-radius: 24px;
-            padding: 35px;
-            margin-bottom: 70px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-        }
-
-        .state-selector {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .state-btn {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            color: var(--text-muted);
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 0.9rem;
-            transition: all 0.25s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .state-btn:hover {
+        /* MOCKUP LIVE CARD PULSATION */
+        .flutter-live-card {
             border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.25);
+            animation: glow-pulse 2.5s infinite alternate;
+        }
+
+        @keyframes glow-pulse {
+            0% { box-shadow: 0 0 10px rgba(0, 212, 255, 0.2); }
+            100% { box-shadow: 0 0 25px rgba(0, 212, 255, 0.5); }
+        }
+
+        .badge-live-tag {
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            background: var(--rouge);
             color: #fff;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-bottom-left-radius: 10px;
+            border-top-right-radius: 15px;
+            letter-spacing: 1px;
         }
 
-        .state-btn.active {
-            background: rgba(0, 212, 255, 0.16);
-            border-color: var(--bleu);
-            color: var(--bleu);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-        }
-
-        .state-btn.active.orange {
-            background: rgba(255, 119, 0, 0.16);
-            border-color: var(--orange);
-            color: var(--orange);
-            box-shadow: 0 0 15px rgba(255, 119, 0, 0.2);
-        }
-
-        .state-btn.active.green {
-            background: rgba(34, 197, 94, 0.16);
-            border-color: var(--vert);
-            color: var(--vert);
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.2);
-        }
-
-        /* FRAME MOCKUP DE L'APP */
-        .mockup-frame {
-            background: #090C12;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 20px;
-            padding: 28px;
-            max-width: 580px;
-            margin: 0 auto;
-            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
-        }
-
-        .app-card-mockup {
-            background: #161D2B;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-        }
-
-        .app-card-header {
+        .flutter-live-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 16px;
             margin-bottom: 16px;
         }
 
-        .app-badge-live {
-            background: var(--rouge);
-            color: #fff;
-            font-size: 0.78rem;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 20px;
+        .twitch-icon-box {
+            width: 50px;
+            height: 50px;
+            background: var(--twitch-purple);
+            border-radius: 12px;
             display: flex;
             align-items: center;
-            gap: 7px;
-            animation: pulse-red 2s infinite;
-            letter-spacing: 0.5px;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            box-shadow: 0 0 12px rgba(145, 70, 255, 0.4);
         }
 
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-
-        .app-badge-scheduled {
-            background: rgba(255, 119, 0, 0.18);
-            color: var(--orange);
-            border: 1px solid var(--orange);
-            font-size: 0.78rem;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 20px;
-        }
-
-        .app-badge-green {
-            background: rgba(34, 197, 94, 0.18);
-            color: var(--vert);
-            border: 1px solid var(--vert);
-            font-size: 0.78rem;
-            font-weight: 800;
-            padding: 5px 12px;
-            border-radius: 20px;
-        }
-
-        .app-badge-off {
-            background: rgba(148, 163, 184, 0.18);
-            color: var(--text-muted);
-            font-size: 0.78rem;
-            font-weight: 700;
-            padding: 5px 12px;
-            border-radius: 20px;
-        }
-
-        .mockup-title {
+        .flutter-live-title {
             font-family: 'Chakra Petch', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .flutter-live-desc {
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .flutter-btn-cyan {
+            width: 100%;
+            background: var(--bleu);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-weight: 800;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 12px var(--bleu-glow);
+        }
+
+        /* DUO TUILES SCHEDULED (SCHEDULEDEVENTCARD) */
+        .scheduled-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .scheduled-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            text-align: center;
+        }
+
+        .scheduled-card.tourney {
+            border-color: rgba(255, 140, 0, 0.3);
+        }
+
+        .scheduled-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .scheduled-title {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+
+        .countdown-text {
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 800;
             color: #fff;
             margin-bottom: 8px;
+        }
+
+        .rappel-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.68rem;
             font-weight: 700;
-        }
-
-        .mockup-sub {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            margin-bottom: 18px;
-            line-height: 1.5;
-        }
-
-        .countdown-display {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-
-        .time-unit {
-            background: rgba(0, 0, 0, 0.45);
-            border: 1px solid rgba(0, 212, 255, 0.25);
-            border-radius: 10px;
-            padding: 10px 14px;
-            text-align: center;
-            min-width: 62px;
-        }
-
-        .time-val {
-            font-family: 'Chakra Petch', sans-serif;
-            font-size: 1.45rem;
-            font-weight: 800;
+            border: 1px solid rgba(0, 212, 255, 0.5);
+            background: rgba(0, 212, 255, 0.1);
             color: var(--bleu);
+            cursor: pointer;
         }
 
-        .time-val.orange {
+        .rappel-btn.orange {
+            border-color: rgba(255, 140, 0, 0.5);
+            background: rgba(255, 140, 0, 0.1);
             color: var(--orange);
         }
 
-        .time-lbl {
-            font-size: 0.68rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            font-weight: 700;
-            margin-top: 2px;
+        /* ANNOUNCEMENT CARD */
+        .announcement-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Chakra Petch', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 800;
+            color: #fff;
         }
 
-        .mockup-btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 800;
-            font-size: 0.92rem;
-            cursor: pointer;
+        /* ONGLET TOURNOIS SHOWCASE */
+        .tab-button-group {
             display: flex;
-            align-items: center;
-            justify-content: center;
             gap: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.88rem;
+            font-family: 'Chakra Petch', sans-serif;
             transition: all 0.2s;
         }
 
-        .mockup-btn-primary {
-            background: var(--bleu);
-            color: #000;
-            box-shadow: 0 0 15px var(--bleu-glow);
+        .tab-btn.active {
+            background: rgba(0, 212, 255, 0.15);
+            border-color: var(--bleu);
+            color: var(--bleu);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.25);
         }
 
-        .mockup-btn-twitch {
-            background: #9146FF;
-            color: #fff;
-            box-shadow: 0 0 15px rgba(145, 70, 255, 0.4);
+        .tab-btn.active.orange {
+            background: rgba(255, 140, 0, 0.15);
+            border-color: var(--orange);
+            color: var(--orange);
+            box-shadow: 0 0 12px rgba(255, 140, 0, 0.25);
         }
 
-        .mockup-btn-disabled {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            cursor: not-allowed;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* MOCKUP TABLE CLASSEMENT & MATCHS */
-        .mockup-table {
+        .tourney-table {
             width: 100%;
             border-collapse: collapse;
             font-size: 0.88rem;
             margin-top: 15px;
         }
 
-        .mockup-table th {
+        .tourney-table th {
             text-align: left;
-            padding: 10px 12px;
+            padding: 10px;
             color: var(--text-muted);
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             font-family: 'Chakra Petch', sans-serif;
-            letter-spacing: 0.5px;
         }
 
-        .mockup-table td {
-            padding: 12px;
+        .tourney-table td {
+            padding: 12px 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .rank-pos {
-            font-weight: 800;
-            color: var(--bleu);
-            width: 35px;
-        }
-
-        .team-name {
-            font-weight: 700;
-            color: #fff;
         }
 
         /* FOOTER */
         footer {
             border-top: 1px solid var(--panel-border);
-            background: rgba(7, 9, 14, 0.96);
+            background: rgba(15, 17, 21, 0.95);
             padding: 50px 20px 40px;
             text-align: center;
             color: var(--text-muted);
             font-size: 0.92rem;
         }
 
-        .footer-logo-wrapper {
+        .footer-logo-box {
             position: relative;
             width: 80px;
             height: 80px;
@@ -741,7 +699,7 @@
             justify-content: center;
         }
 
-        .footer-logo-wrapper canvas {
+        .footer-logo-box canvas {
             position: absolute;
             top: -20px;
             left: -20px;
@@ -790,13 +748,20 @@
             .share-box { flex-direction: column; text-align: center; }
             .share-info h3 { justify-content: center; }
             .share-actions { width: 100%; justify-content: center; }
-            .context-badge-card { flex-direction: column; text-align: center; }
+            .safran-card { flex-direction: column; text-align: center; }
+            .scheduled-row { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HEADER & NAVBAR AVEC LOGO CONSTELLATION -->
+    <!-- ARRIERE-PLAN COMPOSITE IMMERSIF AVEC FOND.PNG + NEON OVERLAY + GRILLE FLUTTER -->
+    <div class="bg-layer"></div>
+    <div class="bg-overlay"></div>
+    <div class="grid-layer"></div>
+    <canvas id="embersCanvas"></canvas>
+
+    <!-- HEADER & NAVBAR AVEC LOGO CONSTELLATION 3D -->
     <header>
         <div class="nav-container">
             <a href="#" class="brand">
@@ -810,10 +775,9 @@
                 </div>
             </a>
             <div class="nav-links">
-                <a href="#about-section" class="nav-link">À propos</a>
-                <a href="#tourney-tuile" class="nav-link">Tuile Tournois</a>
-                <a href="#live-tuile" class="nav-link">Tuile WebTV</a>
-                <a href="#tourney-details" class="nav-link">Espace Résultats</a>
+                <a href="#about" class="nav-link">À propos</a>
+                <a href="#home-features" class="nav-link">L'Écran d'Accueil</a>
+                <a href="#tourney-space" class="nav-link">Suivi Tournois</a>
                 <a href="#community" class="nav-link">Communauté</a>
             </div>
             <a href="https://esportastt-bot.github.io/astt-app/" class="btn-download-nav" target="_blank">
@@ -824,35 +788,35 @@
 
     <div class="container">
         
-        <!-- HERO BANNER AVEC LOGO ET CONSTELLATION 3D SPECIALE -->
+        <!-- HERO BANNER AVEC LOGO CONSTELLATION 3D -->
         <section class="hero">
-            <div class="hero-logo-container">
+            <div class="hero-logo-box">
                 <canvas id="heroConstellationCanvas"></canvas>
                 <img src="logo.png" alt="Logo ASTT E-Sport" class="hero-logo-img">
             </div>
 
             <div class="hero-tag">
-                <i class="fas fa-rocket"></i> Application Officielle ASTT E-Sport
+                <i class="fas fa-mobile-screen-button"></i> Application Officielle ASTT E-Sport
             </div>
             
-            <h1>L'E-Sport à <span class="highlight-bleu">Safran</span>, à portée de <span class="highlight-orange">main</span> !</h1>
+            <h1>L'E-Sport à <span class="bleu">Safran</span>, à portée de <span class="orange">main</span> !</h1>
             
             <p class="lead">
-                Rejoignez la communauté gaming officielle de l'association ASTT. Suivez les tournois en direct, consultez les scores map par map, l'ordre de passage des équipes, et partagez votre passion avec vos collègues !
+                Suivez en direct nos WebTV Twitch, inscrivez-vous aux tournois, consultez l'ordre de passage des matchs du soir et les scores map par map en temps réel. Une application créée spécialement pour l'association ASTT !
             </p>
         </section>
 
-        <!-- CARTE CONTEXTUELLE : SAFRAN HELICOPTER ENGINES & ASTT -->
-        <div id="about-section" class="context-badge-card">
-            <div class="context-icon">
+        <!-- SAFRAN HELICOPTER ENGINES CONTEXT CARD -->
+        <div id="about" class="safran-card">
+            <div class="safran-icon">
                 <i class="fas fa-building-user"></i>
             </div>
-            <div class="context-text">
-                <h3>Une application pensée par et pour les salariés de Safran Tarnos</h3>
+            <div class="safran-text">
+                <h3>Créée par et pour les salariés de Safran Helicopter Engines (Tarnos)</h3>
                 <p>
-                    La section <strong>E-sport</strong> fait partie intégrante de l'<strong>ASTT</strong> (Association Sportive & Touristique Turboméca), créée par et pour les employés de <strong>Safran Helicopter Engines à Tarnos</strong>. 
+                    La section <strong>E-sport</strong> fait partie intégrante de l'<strong>ASTT</strong> (Association Sportive & Touristique Turboméca). 
                     <br><br>
-                    <strong>L'objectif de l'application :</strong> Offrir un canal de communication fluide et moderne pour <strong>TOUS les salariés intéressés par l'e-sport</strong>, qu'ils soient déjà adhérents à l'ASTT ou simples passionnés/curieux qui souhaitent suivre nos tournois !
+                    <strong>L'objectif de cette application :</strong> Fournir un moyen de communication moderne et efficace pour <strong>TOUS les salariés intéressés par cette discipline</strong>, qu'ils soient déjà inscrits à l'ASTT ou simplement curieux de suivre les tournois et les lives entre collègues !
                 </p>
             </div>
         </div>
@@ -860,14 +824,14 @@
         <!-- BANNIERE BOUCHE-A-OREILLE / PARTAGE ENTRE COLLEGUES -->
         <div class="share-box">
             <div class="share-info">
-                <h3><i class="fas fa-users-rays"></i> Faites tourner l'app autour de vous !</h3>
+                <h3><i class="fas fa-share-nodes"></i> Faites tourner l'application entre collègues !</h3>
                 <p>
-                    Faites grandir la section ! Partagez cette application avec vos collègues dans les bureaux ou ateliers, vos coéquipiers de jeu, et tous les amateurs de gaming de votre entourage.
+                    Partagez l'application dans les bureaux, les ateliers et vos groupes de discussion avec vos coéquipiers de jeu et passionnés de gaming à Tarnos !
                 </p>
             </div>
             <div class="share-actions">
                 <button class="btn-share" onclick="shareApp()">
-                    <i class="fas fa-share-nodes"></i> Partager l'app
+                    <i class="fas fa-paper-plane"></i> Partager l'app
                 </button>
                 <button class="btn-copy-link" onclick="copyLink()">
                     <i class="fas fa-link"></i> Copier le lien
@@ -875,357 +839,284 @@
             </div>
         </div>
 
-        <!-- SECTION VUE D'ENSEMBLE DES TUILES -->
-        <div class="section-header">
-            <span class="section-tag">Fonctionnalités de l'accueil</span>
-            <h2 class="section-title">Les 3 piliers de votre écran d'accueil</h2>
+        <!-- SECTION 1: L'ECRAN D'ACCUEIL ET SES COMPOSANTS EXACTS -->
+        <div id="home-features" class="section-header">
+            <span class="section-tag">Interface réelle</span>
+            <h2 class="section-title">L'Écran d'Accueil et ses cartes dynamiques</h2>
         </div>
 
-        <div class="feature-grid">
-            <!-- 1. TUILE ANNONCES -->
-            <div class="card">
-                <div class="card-icon">
-                    <i class="fas fa-bullhorn"></i>
-                </div>
-                <h3>1. Tuile Annonces</h3>
-                <p>
-                    Restez informés des événements officiels de la section : <strong>ouverture des inscriptions annuelles ASTT</strong>, assemblées, sondages de jeux, et informations importantes. Activez la cloche en haut de l'écran pour recevoir les notifications Push instantanées !
-                </p>
-            </div>
-
-            <!-- 2. TUILE TOURNOIS -->
-            <div class="card">
-                <div class="card-icon green">
-                    <i class="fas fa-trophy"></i>
-                </div>
-                <h3>2. Tuile Tournois</h3>
-                <p>
-                    Avertit de l'ouverture des inscriptions à un tournoi. Une fois les inscriptions closes, un <strong>compte à rebours</strong> s'enclenche automatiquement jusqu'au Jour J du tournoi !
-                </p>
-            </div>
-
-            <!-- 3. TUILE LIVE WEBTV -->
-            <div class="card">
-                <div class="card-icon orange">
-                    <i class="fas fa-headset"></i>
-                </div>
-                <h3>3. Tuile Live WebTV</h3>
-                <p>
-                    Annonce la diffusion en direct des matchs. Elle affiche le décompte jusqu'au cast, puis bascule instantanément en bouton <strong>"Rejoindre le Live Twitch"</strong> dès que le stream commence.
-                </p>
-            </div>
-        </div>
-
-        <!-- SECTION SHOWCASE INTERACTIF : TUILE TOURNOIS ET SES ETATS -->
-        <div id="tourney-tuile" class="section-header">
-            <span class="section-tag">Comportement dynamique</span>
-            <h2 class="section-title">La Tuile Tournois et ses 3 Phases</h2>
-        </div>
-
-        <div class="showcase-container">
+        <div class="app-phone-container">
             <p style="color: var(--text-muted); margin-bottom: 25px;">
-                Testez ci-dessous la manière dont la tuile <strong>Tournois</strong> s'adapte sur l'écran d'accueil de l'application :
+                Voici la structure exacte des cartes réelles qui s'affichent sur votre écran d'accueil en fonction des événements :
             </p>
 
-            <div class="state-selector">
-                <button class="state-btn active green" onclick="switchTourneyState('open')">
-                    <i class="fas fa-user-plus"></i> Phase 1 : Inscriptions Ouvertes
-                </button>
-                <button class="state-btn" onclick="switchTourneyState('countdown')">
-                    <i class="fas fa-stopwatch"></i> Phase 2 : Compte à Rebours post-inscription
-                </button>
-                <button class="state-btn" onclick="switchTourneyState('ongoing')">
-                    <i class="fas fa-play"></i> Phase 3 : Tournoi en cours
-                </button>
+            <!-- 1. DUO DE TUILES PROGRAMMÉES (SCHEDULEDEVENTCARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.05rem; margin-bottom: 10px;">
+                <i class="fas fa-clock" style="color: var(--bleu);"></i> 1. Tuiles d'Événements Programmés (Compte à Rebours & Rappel)
             </div>
-
-            <!-- MOCKUP TOURNOI -->
-            <div class="mockup-frame">
-                <!-- PHASE 1: INSCRIPTIONS OUVERTES -->
-                <div id="mockup-tourney-open" class="app-card-mockup" style="border-left: 4px solid var(--vert);">
-                    <div class="app-card-header">
-                        <div class="app-badge-green">
-                            <i class="fas fa-edit"></i> INSCRIPTIONS OUVERTES
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--vert); font-weight: 700;">ASTT Cup #4</span>
-                    </div>
-                    <div class="mockup-title">Tournoi Rocket League 3v3</div>
-                    <div class="mockup-sub">Inscrivez votre équipe dès maintenant sur le Discord ASTT ! Date limite : Vendredi 20h.</div>
-                    <button class="mockup-btn mockup-btn-primary" style="background: var(--vert);">
-                        <i class="fas fa-paper-plane"></i> S'inscrire au Tournoi
-                    </button>
-                </div>
-
-                <!-- PHASE 2: COMPTE A REBOURS POST-INSCRIPTION -->
-                <div id="mockup-tourney-cd" class="app-card-mockup" style="display: none; border-left: 4px solid var(--orange);">
-                    <div class="app-card-header">
-                        <div class="app-badge-scheduled">
-                            <i class="fas fa-lock"></i> INSCRIPTIONS CLOSES
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--orange); font-weight: 700;">Jour J imminents</span>
-                    </div>
-                    <div class="mockup-title">Tournoi Rocket League 3v3</div>
-                    <div class="mockup-sub">Les inscriptions sont closes. Le tournoi débute dans :</div>
-                    <div class="countdown-display">
-                        <div class="time-unit"><div class="time-val orange">01</div><div class="time-lbl">Jour</div></div>
-                        <div class="time-unit"><div class="time-val orange">05</div><div class="time-lbl">Heures</div></div>
-                        <div class="time-unit"><div class="time-val orange">20</div><div class="time-lbl">Min</div></div>
-                        <div class="time-unit"><div class="time-val orange">44</div><div class="time-lbl">Sec</div></div>
-                    </div>
-                    <button class="mockup-btn mockup-btn-disabled">
-                        <i class="fas fa-hourglass-start"></i> Préparation du tournoi
-                    </button>
-                </div>
-
-                <!-- PHASE 3: TOURNOI EN COURS -->
-                <div id="mockup-tourney-ongoing" class="app-card-mockup" style="display: none; border-left: 4px solid var(--bleu);">
-                    <div class="app-card-header">
-                        <div class="app-badge-live" style="background: var(--bleu); color: #000;">
-                            <i class="fas fa-trophy"></i> TOURNOI EN COURS
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--bleu); font-weight: 700;">En direct</span>
-                    </div>
-                    <div class="mockup-title">Tournoi Rocket League 3v3</div>
-                    <div class="mockup-sub">Les matchs ont démarré ! Suivez les scores et classements en direct.</div>
-                    <button class="mockup-btn mockup-btn-primary">
-                        <i class="fas fa-chart-line"></i> Accéder au Suivi en Direct
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- SECTION SHOWCASE INTERACTIF : TUILE LIVE WEBTV -->
-        <div id="live-tuile" class="section-header">
-            <span class="section-tag">Streaming & Cast</span>
-            <h2 class="section-title">La Tuile Live WebTV en action</h2>
-        </div>
-
-        <div class="showcase-container">
-            <p style="color: var(--text-muted); margin-bottom: 25px;">
-                Découvrez comment la tuile <strong>Live WebTV</strong> bascule automatiquement vers Twitch au démarrage du direct :
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                Lorsqu'un live ou un tournoi est planifié, deux tuiles compactes se placent côte à côte sous le logo avec décompte temps réel et bouton d'ajout au calendrier du téléphone :
             </p>
 
-            <div class="state-selector">
-                <button class="state-btn active orange" onclick="switchLiveState('live')">
-                    <i class="fas fa-circle" style="color: var(--rouge); font-size: 0.7rem;"></i> 1. "Rejoindre le Live" (Stream démarré)
-                </button>
-                <button class="state-btn" onclick="switchLiveState('scheduled')">
-                    <i class="fas fa-clock"></i> 2. Live Programmé (Compte à rebours)
-                </button>
-                <button class="state-btn" onclick="switchLiveState('off')">
-                    <i class="fas fa-power-off"></i> 3. Pas de Live (Hors ligne)
-                </button>
-            </div>
-
-            <!-- MOCKUP LIVE -->
-            <div class="mockup-frame">
-                <!-- ETAT 1: REJOINDRE LE LIVE -->
-                <div id="mockup-live-on" class="app-card-mockup" style="border-left: 4px solid var(--rouge);">
-                    <div class="app-card-header">
-                        <div class="app-badge-live">
-                            <i class="fas fa-broadcast-tower"></i> EN DIRECT
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--text-muted);">WebTV ASTT</span>
+            <div class="scheduled-row">
+                <!-- TUILE LIVE SCHEDULED -->
+                <div class="scheduled-card">
+                    <div class="scheduled-header" style="color: var(--bleu);">
+                        <i class="fas fa-video"></i> LIVE WEBTV
                     </div>
-                    <div class="mockup-title">GRAND CAST : PHASES FINALES</div>
-                    <div class="mockup-sub">Commenté en direct par nos casteurs ASTT ! Rejoignez la WebTV Twitch.</div>
-                    <button class="mockup-btn mockup-btn-twitch">
-                        <i class="fab fa-twitch"></i> REJOINDRE LE LIVE TWITCH
+                    <div class="scheduled-title">Grande Finale Rocket League</div>
+                    <div class="countdown-text">01j 04h 15m 30s</div>
+                    <button class="rappel-btn" onclick="showToast('Rappel de Live ajouté au calendrier !')">
+                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
                     </button>
                 </div>
-
-                <!-- ETAT 2: LIVE PROGRAMME -->
-                <div id="mockup-live-cd" class="app-card-mockup" style="display: none; border-left: 4px solid var(--orange);">
-                    <div class="app-card-header">
-                        <div class="app-badge-scheduled">
-                            <i class="fas fa-video"></i> CAST ANNONCÉ
-                        </div>
-                        <span style="font-size: 0.8rem; color: var(--orange);">Ce soir 20h45</span>
+                <!-- TUILE TOURNOI SCHEDULED -->
+                <div class="scheduled-card tourney">
+                    <div class="scheduled-header" style="color: var(--orange);">
+                        <i class="fas fa-trophy"></i> TOURNOI ASTT
                     </div>
-                    <div class="mockup-title">Soirée Cast & Tournoi Safran</div>
-                    <div class="countdown-display">
-                        <div class="time-unit"><div class="time-val">00</div><div class="time-lbl">Jours</div></div>
-                        <div class="time-unit"><div class="time-val">01</div><div class="time-lbl">Heure</div></div>
-                        <div class="time-unit"><div class="time-val">15</div><div class="time-lbl">Min</div></div>
-                        <div class="time-unit"><div class="time-val">30</div><div class="time-lbl">Sec</div></div>
-                    </div>
-                    <button class="mockup-btn mockup-btn-disabled">
-                        <i class="fas fa-clock"></i> En attente du début du live
-                    </button>
-                </div>
-
-                <!-- ETAT 3: HORS LIGNE -->
-                <div id="mockup-live-off" class="app-card-mockup" style="display: none; border-left: 4px solid var(--text-muted);">
-                    <div class="app-card-header">
-                        <div class="app-badge-off">HORS LIGNE</div>
-                    </div>
-                    <div class="mockup-title">Aucun direct actuellement</div>
-                    <div class="mockup-sub">Le prochain live sera annoncé sur l'application.</div>
-                    <button class="mockup-btn mockup-btn-disabled">
-                        <i class="fas fa-video-slash"></i> WebTV Inactive
+                    <div class="scheduled-title">Tournoi FC24 / FIFA</div>
+                    <div class="countdown-text">03j 12h 40m 10s</div>
+                    <button class="rappel-btn orange" onclick="showToast('Rappel de Tournoi ajouté au calendrier !')">
+                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- SECTION DETAILS ONGLET TOURNOIS (ORDRE DE PASSAGE, REPLAY YOUTUBE, SCORES) -->
-        <div id="tourney-details" class="section-header">
-            <span class="section-tag">Suivi complet</span>
-            <h2 class="section-title">Tout l'Espace Tournois en détails</h2>
-        </div>
-
-        <div class="showcase-container">
-            <p style="color: var(--text-muted); margin-bottom: 25px;">
-                Dans la rubrique dédiée **TOURNOIS**, vous retrouvez tout le suivi détaillé avant, pendant et après l'événement :
+            <!-- 2. TUILE LIVE EN DIRECT (LIVECARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.05rem; margin-bottom: 10px; margin-top: 30px;">
+                <i class="fas fa-broadcast-tower" style="color: var(--rouge);"></i> 2. La Tuile "EN DIRECT" (LiveCard Twitch)
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                Dès que la prise d'antenne commence, la carte animée <strong>LiveCard</strong> s'illumine sur l'accueil avec son effet de pulsation néon cyan et son accès direct à Twitch :
             </p>
 
-            <div class="state-selector">
-                <button class="state-btn active" id="btn-tab-order" onclick="switchTourneyTab('order')">
-                    <i class="fas fa-list-ol"></i> 1. Ordre de passage du soir
+            <div class="flutter-glass-card flutter-live-card">
+                <div class="badge-live-tag">EN DIRECT</div>
+                <div class="flutter-live-header">
+                    <div class="twitch-icon-box">
+                        <i class="fab fa-twitch"></i>
+                    </div>
+                    <div>
+                        <div class="flutter-live-title">CHAMPIONNAT SAFRAN TARNOS — LIVE CAST</div>
+                        <div class="flutter-live-desc">Le tournoi est diffusé en direct. Retrouvez les casteurs ASTT sur la WebTV !</div>
+                    </div>
+                </div>
+                <button class="flutter-btn-cyan" onclick="window.open('https://twitch.tv', '_blank')">
+                    REJOINDRE LE STREAM TWITCH
                 </button>
-                <button class="state-btn" id="btn-tab-rank" onclick="switchTourneyTab('rank')">
-                    <i class="fas fa-chart-simple"></i> 2. Classement en direct (% cumulé)
+            </div>
+
+            <!-- 3. TUILE INSCRIPTION TOURNOI (TOURNAMENTCARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.05rem; margin-bottom: 10px; margin-top: 30px;">
+                <i class="fas fa-file-pen" style="color: var(--orange);"></i> 3. La Tuile "INSCRIPTIONS TOURNOI" (TournamentCard)
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                Avertit que les inscriptions pour un nouveau tournoi sont ouvertes. Affiche un décompte avant la date limite et permet de s'inscrire en un clic (HelloAsso / lien direct) :
+            </p>
+
+            <div class="flutter-glass-card" style="border-color: rgba(255, 140, 0, 0.4);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="background: rgba(255, 140, 0, 0.2); color: var(--orange); font-family: 'Chakra Petch'; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 4px;">
+                        INSCRIPTIONS TOURNOI
+                    </span>
+                    <span style="font-size: 0.78rem; color: #fff; display: flex; align-items: center; gap: 4px;">
+                        <i class="fas fa-hourglass-half" style="color: var(--orange);"></i> Fin dans : 02j 14h
+                    </span>
+                </div>
+                <div style="font-family: 'Chakra Petch'; font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                    Saison 1 : Tournoi Rocket League 3v3
+                </div>
+                <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 12px;">
+                    Les inscriptions pour le prochain tournoi ASTT sont ouvertes à tous les salariés de Safran ! Places limitées.
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--orange); font-style: italic;">
+                    Cliquez pour ouvrir la fiche détaillée et s'inscrire
+                </div>
+            </div>
+
+            <!-- 4. FIL D'ANNONCES (ANNOUNCEMENTCARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.05rem; margin-bottom: 10px; margin-top: 30px;">
+                <i class="fas fa-bullhorn" style="color: var(--bleu);"></i> 4. Fil d'Annonces & Notifications
+            </div>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
+                Toutes les actualités officielles (ouvertures des inscriptions annuelles ASTT, assemblées, sondages) sont publiées sous forme de cartes d'annonces :
+            </p>
+
+            <div class="flutter-glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span class="announcement-badge">ANNONCE</span>
+                    <span style="font-size: 0.75rem; color: var(--text-muted);">Hier</span>
+                </div>
+                <div style="font-weight: 700; color: #fff; font-size: 1rem; margin-bottom: 6px;">
+                    Ouverture des adhésions ASTT E-Sport 2026
+                </div>
+                <div style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">
+                    La campagne de réinscription et de nouvelle adhésion pour la section e-sport de Safran Tarnos est lancée !
+                </div>
+                <div style="color: var(--bleu); font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                    <i class="fas fa-link"></i> En savoir plus
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: L'ESPACE DÉDIÉ TOURNOIS -->
+        <div id="tourney-space" class="section-header">
+            <span class="section-tag">Onglet dédié</span>
+            <h2 class="section-title">L'Espace Tournois (Ordre de passage & Live Scores)</h2>
+        </div>
+
+        <div class="app-phone-container">
+            <p style="color: var(--text-muted); margin-bottom: 20px;">
+                Cliquez sur les boutons ci-dessous pour explorer les fonctionnalités de l'onglet <strong>TOURNOIS</strong> :
+            </p>
+
+            <div class="tab-button-group">
+                <button class="tab-btn active" id="btn-order" onclick="showTourneyView('order')">
+                    <i class="fas fa-list-ol"></i> 1. Ordre de Passage du Soir
                 </button>
-                <button class="state-btn" id="btn-tab-matches" onclick="switchTourneyTab('matches')">
-                    <i class="fas fa-gamepad"></i> 3. Scores & Résultats par Map
+                <button class="tab-btn" id="btn-rank" onclick="showTourneyView('rank')">
+                    <i class="fas fa-chart-line"></i> 2. Classement Général (% Cumulé)
                 </button>
-                <button class="state-btn" id="btn-tab-replay" onclick="switchTourneyTab('replay')">
+                <button class="tab-btn" id="btn-matches" onclick="showTourneyView('matches')">
+                    <i class="fas fa-gamepad"></i> 3. Scores Map par Map
+                </button>
+                <button class="tab-btn" id="btn-replay" onclick="showTourneyView('replay')">
                     <i class="fab fa-youtube" style="color: #FF0000;"></i> 4. Revoir le Cast (YouTube)
                 </button>
             </div>
 
-            <div class="mockup-frame" style="max-width: 650px;">
-                <!-- TAB 1: ORDRE DE PASSAGE DU SOIR -->
-                <div id="detail-order" style="display: block;">
-                    <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.15rem; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>📋 Ordre de Passage du Soir</span>
-                        <span style="font-size: 0.75rem; color: var(--orange);"><i class="fas fa-clock"></i> Publié à 20h00</span>
-                    </div>
-                    <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 15px;">
-                        Découvrez la séquence exacte des matchs planifiés pour la soirée juste avant le lancement du tournoi :
-                    </p>
-                    <table class="mockup-table">
-                        <thead>
-                            <tr>
-                                <th>HEURE</th>
-                                <th>MATCH</th>
-                                <th>FORMAT</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="color: var(--bleu); font-weight: 700;">20h30</td>
-                                <td class="team-name">Équipe Rotor (Tarnos) VS Turbo Strikers</td>
-                                <td>BO3 (Best of 3)</td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--bleu); font-weight: 700;">21h15</td>
-                                <td class="team-name">Helicopter Kings VS Safran Warriors</td>
-                                <td>BO3 (Best of 3)</td>
-                            </tr>
-                            <tr>
-                                <td style="color: var(--orange); font-weight: 700;">22h00</td>
-                                <td class="team-name">🔥 GRANDE FINALE (Vainqueur M1 vs M2)</td>
-                                <td>BO5 (Best of 5)</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- VUE 1: ORDRE DE PASSAGE DU SOIR -->
+            <div id="view-order" style="display: block;">
+                <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 6px;">
+                    📋 Ordre de Passage des Matchs (Soir du Tournoi)
                 </div>
+                <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 15px;">
+                    Juste avant le début du tournoi le soir même, l'ordre de passage est publié pour permettre à chaque équipe de connaître son heure de match :
+                </p>
+                <table class="tourney-table">
+                    <thead>
+                        <tr>
+                            <th>HORAIRE</th>
+                            <th>AFFRONTEMENT</th>
+                            <th>FORMAT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: var(--bleu); font-weight: 800;">20h30</td>
+                            <td style="font-weight: 700; color: #fff;">Équipe Rotor Tarnos VS Turbo Strikers</td>
+                            <td>BO3 (Best of 3)</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--bleu); font-weight: 800;">21h15</td>
+                            <td style="font-weight: 700; color: #fff;">Helicopter Kings VS Safran Warriors</td>
+                            <td>BO3 (Best of 3)</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--orange); font-weight: 800;">22h00</td>
+                            <td style="font-weight: 700; color: var(--orange);">🔥 GRANDE FINALE (Vainqueurs M1 vs M2)</td>
+                            <td>BO5 (Best of 5)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- TAB 2: CLASSEMENT EN DIRECT -->
-                <div id="detail-rank" style="display: none;">
-                    <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.15rem; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
-                        <span>🏆 Classement Général</span>
-                        <span style="font-size: 0.75rem; color: var(--vert);"><i class="fas fa-sync-alt"></i> Mis à jour en direct</span>
-                    </div>
-                    <table class="mockup-table">
-                        <thead>
-                            <tr>
-                                <th>POS</th>
-                                <th>ÉQUIPE</th>
-                                <th>VIC.</th>
-                                <th>DÉF.</th>
-                                <th>% CUMULÉ</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="rank-pos">#1</td>
-                                <td class="team-name">Turbo Strikers</td>
-                                <td>3</td>
-                                <td>0</td>
-                                <td style="color: var(--vert); font-weight: 800;">87.5 %</td>
-                            </tr>
-                            <tr>
-                                <td class="rank-pos" style="color: var(--orange);">#2</td>
-                                <td class="team-name">Helicopter Kings</td>
-                                <td>2</td>
-                                <td>1</td>
-                                <td style="color: var(--orange); font-weight: 800;">64.2 %</td>
-                            </tr>
-                            <tr>
-                                <td class="rank-pos" style="color: var(--text-muted);">#3</td>
-                                <td class="team-name">Équipe Rotor (Tarnos)</td>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>42.0 %</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- VUE 2: CLASSEMENT EN DIRECT -->
+            <div id="view-rank" style="display: none;">
+                <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 6px;">
+                    🏆 Classement Général (% Cumulé)
                 </div>
+                <table class="tourney-table">
+                    <thead>
+                        <tr>
+                            <th>POS</th>
+                            <th>ÉQUIPE</th>
+                            <th>V</th>
+                            <th>D</th>
+                            <th>% CUMULÉ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="color: var(--bleu); font-weight: 800;">#1</td>
+                            <td style="font-weight: 700; color: #fff;">Turbo Strikers</td>
+                            <td>3</td>
+                            <td>0</td>
+                            <td style="color: var(--vert); font-weight: 800;">85.0 %</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--orange); font-weight: 800;">#2</td>
+                            <td style="font-weight: 700; color: #fff;">Helicopter Kings</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td style="color: var(--orange); font-weight: 800;">62.5 %</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--text-muted); font-weight: 800;">#3</td>
+                            <td style="font-weight: 700; color: #fff;">Équipe Rotor Tarnos</td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>40.0 %</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-                <!-- TAB 3: MATCHS MAP PAR MAP -->
-                <div id="detail-matches" style="display: none;">
-                    <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.15rem; margin-bottom: 12px;">
-                        🎮 Score des Matchs & Maps
+            <!-- VUE 3: SCORES MATCHS MAP PAR MAP -->
+            <div id="view-matches" style="display: none;">
+                <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px;">
+                    🎮 Résultats et Scores Map par Map
+                </div>
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 16px;">
+                    <div style="display: flex; justify-content: space-between; font-weight: 800; color: #fff; margin-bottom: 8px;">
+                        <span>Turbo Strikers <strong style="color: var(--vert);">2</strong></span>
+                        <span style="color: var(--orange);">VS</span>
+                        <span>Helicopter Kings <strong style="color: var(--rouge);">1</strong></span>
                     </div>
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 15px; margin-bottom: 12px;">
-                        <div style="display: flex; justify-content: space-between; font-weight: 700; color: #fff; margin-bottom: 8px;">
-                            <span>Turbo Strikers <strong style="color: var(--vert);">2</strong></span>
-                            <span style="color: var(--orange);">VS</span>
-                            <span>Helicopter Kings <strong style="color: var(--rouge);">1</strong></span>
-                        </div>
-                        <div style="font-size: 0.82rem; color: var(--text-muted);">
-                            • Map 1 (Mannfield) : 65% - 35% <br>
-                            • Map 2 (DFH Stadium) : 40% - 60% <br>
-                            • Map 3 (Champions Field) : 55% - 45%
-                        </div>
+                    <div style="font-size: 0.84rem; color: var(--text-muted); line-height: 1.6;">
+                        • Map 1 (Mannfield) : 60% - 40% <br>
+                        • Map 2 (DFH Stadium) : 45% - 55% <br>
+                        • Map 3 (Champions Field) : 55% - 45%
                     </div>
                 </div>
+            </div>
 
-                <!-- TAB 4: REPLAY YOUTUBE -->
-                <div id="detail-replay" style="display: none; text-align: center; padding: 15px;">
-                    <i class="fab fa-youtube" style="font-size: 3.5rem; color: #FF0000; margin-bottom: 12px;"></i>
-                    <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.2rem; margin-bottom: 8px;">
-                        Revoir les Casts en Replay Vidéo
-                    </div>
-                    <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
-                        Dès la fin d'un tournoi (avec un petit délai pour la récupération et le transfert du fichier vidéo), le bouton <strong>"REVOIR LE CAST (YOUTUBE)"</strong> devient actif dans l'application pour vous permettre de revoir toute l’action !
-                    </p>
-                    <button class="mockup-btn" style="background: #FF0000; color: #fff; max-width: 280px; margin: 0 auto;">
-                        <i class="fab fa-youtube"></i> REVOIR LE CAST (YOUTUBE)
-                    </button>
+            <!-- VUE 4: REPLAY YOUTUBE -->
+            <div id="view-replay" style="display: none; text-align: center; padding: 15px;">
+                <i class="fab fa-youtube" style="font-size: 3.5rem; color: #FF0000; margin-bottom: 12px;"></i>
+                <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.2rem; margin-bottom: 8px;">
+                    Rediffusions Vidéo YouTube
                 </div>
+                <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
+                    Une fois le live terminé (après un léger délai pour la récupération et le transfert du fichier vidéo), le bouton <strong>"REVOIR LE CAST (YOUTUBE)"</strong> s'active dans la fiche du tournoi pour vous permettre de revoir l'événement complet !
+                </p>
+                <button class="flutter-btn-cyan" style="background: #FF0000; color: #fff; max-width: 300px; margin: 0 auto; box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);">
+                    <i class="fab fa-youtube"></i> REVOIR LE CAST (YOUTUBE)
+                </button>
             </div>
         </div>
 
-        <!-- SECTION COMMUNAUTE DISCORD / TWITCH -->
+        <!-- SECTION COMMUNAUTE DISCORD & TWITCH -->
         <div id="community" class="section-header">
-            <span class="section-tag">Échange & Partage</span>
-            <h2 class="section-title">Rejoignez le Discord & Twitch ASTT</h2>
+            <span class="section-tag">Rejoignez-nous</span>
+            <h2 class="section-title">Twitch WebTV & Serveur Discord</h2>
         </div>
 
-        <div class="card" style="margin-bottom: 70px; text-align: center; padding: 45px 25px; border-color: rgba(88, 101, 242, 0.4);">
-            <i class="fab fa-discord" style="font-size: 4rem; color: #5865F2; margin-bottom: 18px; filter: drop-shadow(0 0 15px rgba(88, 101, 242, 0.5));"></i>
-            <h3 style="font-size: 1.8rem; margin-bottom: 12px;">Échangez avec les salariés passionnés de Safran !</h3>
-            <p style="max-width: 680px; margin: 0 auto 30px; font-size: 1.05rem;">
-                Le serveur Discord et la chaîne Twitch ASTT sont les lieux de rassemblement idéaux pour trouver des coéquipiers pour les tournois, discuter de l'actu gaming ou regarder les streams entre collègues.
+        <div class="safran-card" style="border-color: rgba(145, 70, 255, 0.4); border-left-color: var(--twitch-purple); text-align: center; flex-direction: column; justify-content: center; padding: 40px 20px;">
+            <div style="display: flex; gap: 20px; font-size: 3rem; justify-content: center; margin-bottom: 10px;">
+                <i class="fab fa-twitch" style="color: var(--twitch-purple);"></i>
+                <i class="fab fa-discord" style="color: #5865F2;"></i>
+            </div>
+            <h3 style="font-size: 1.6rem; color: #fff; margin-bottom: 10px;">Échangez avec la communauté Safran E-Sport</h3>
+            <p style="max-width: 650px; margin: 0 auto 25px; color: #CBD5E1;">
+                Rejoignez notre serveur Discord pour former des équipes, discuter des tournois, ou participez aux échanges en direct lors des diffusions Twitch !
             </p>
             <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-                <a href="https://twitch.tv" target="_blank" class="mockup-btn mockup-btn-twitch" style="width: auto; padding: 14px 32px; text-decoration: none;">
+                <a href="https://twitch.tv" target="_blank" class="btn-share" style="background: var(--twitch-purple); color: #fff; box-shadow: 0 0 15px rgba(145, 70, 255, 0.4); text-decoration: none;">
                     <i class="fab fa-twitch"></i> WebTV Twitch
                 </a>
-                <a href="https://discord.gg" target="_blank" class="mockup-btn" style="width: auto; padding: 14px 32px; background: #5865F2; color: #fff; text-decoration: none; box-shadow: 0 0 15px rgba(88, 101, 242, 0.4);">
+                <a href="https://discord.gg" target="_blank" class="btn-share" style="background: #5865F2; color: #fff; box-shadow: 0 0 15px rgba(88, 101, 242, 0.4); text-decoration: none;">
                     <i class="fab fa-discord"></i> Serveur Discord
                 </a>
             </div>
@@ -1233,13 +1124,13 @@
 
     </div>
 
-    <!-- FOOTER AVEC LOGO CONSTELLATION -->
+    <!-- FOOTER AVEC LOGO CONSTELLATION 3D -->
     <footer>
-        <div class="footer-logo-wrapper">
+        <div class="footer-logo-box">
             <canvas id="footerConstellationCanvas"></canvas>
             <img src="logo.png" alt="Logo ASTT">
         </div>
-        <p style="font-weight: 800; color: #fff; margin-bottom: 6px; font-family: 'Chakra Petch', sans-serif; font-size: 1.1rem;">
+        <p style="font-weight: 800; color: #fff; margin-bottom: 6px; font-family: 'Chakra Petch', sans-serif; font-size: 1.15rem;">
             ASTT E-SPORT — SAFRAN HELICOPTER ENGINES (TARNOS)
         </p>
         <p style="font-size: 0.88rem; color: var(--text-muted);">
@@ -1247,17 +1138,67 @@
         </p>
     </footer>
 
-    <!-- TOAST NOTIFICATION -->
+    <!-- TOAST CONFIRMATION -->
     <div id="toast" class="toast">
         <i class="fas fa-check-circle fa-lg"></i>
-        <span>Lien copié dans le presse-papier !</span>
+        <span>Lien de téléchargement copié !</span>
     </div>
 
-    <!-- CODE SCRIPT POUR LA CONSTELLATION 3D DU LOGO & INTERACTIONS -->
+    <!-- CODE SCRIPT CONSTELLATION 3D + PARTICULES + INTERACTIF -->
     <script>
         /* ===================================================
-           CONSTELLATION 3D DYNAMIQUE POUR LE LOGO ASTT (FIBONACCI LATTICE)
-           Replication exacte de Shield3DPainter / LogoConstellation Flutter
+           1. PARTICULES FLOATING EMBERS (COMPOSANT FLUTTER)
+           =================================================== */
+        const embersCanvas = document.getElementById('embersCanvas');
+        const eCtx = embersCanvas.getContext('2d');
+        let embers = [];
+
+        function resizeEmbers() {
+            embersCanvas.width = window.innerWidth;
+            embersCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeEmbers);
+        resizeEmbers();
+
+        for (let i = 0; i < 45; i++) {
+            embers.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                size: Math.random() * 2.5 + 1,
+                speedY: Math.random() * 0.7 + 0.2,
+                speedX: (Math.random() - 0.5) * 0.4,
+                color: Math.random() > 0.5 ? '#00D4FF' : '#FF8C00',
+                opacity: Math.random() * 0.7 + 0.2
+            });
+        }
+
+        function animateEmbers() {
+            eCtx.clearRect(0, 0, embersCanvas.width, embersCanvas.height);
+            for (let i = 0; i < embers.length; i++) {
+                let p = embers[i];
+                p.y -= p.speedY;
+                p.x += p.speedX;
+
+                if (p.y < -10) {
+                    p.y = embersCanvas.height + 10;
+                    p.x = Math.random() * embersCanvas.width;
+                }
+
+                eCtx.beginPath();
+                eCtx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                eCtx.fillStyle = p.color;
+                eCtx.globalAlpha = p.opacity;
+                eCtx.shadowBlur = 8;
+                eCtx.shadowColor = p.color;
+                eCtx.fill();
+            }
+            requestAnimationFrame(animateEmbers);
+        }
+        animateEmbers();
+
+        /* ===================================================
+           2. CONSTELLATION 3D LOGO ASTT (FIBONACCI LATTICE 3D)
+           Replication exacte de LogoConstellation / Shield3DPainter Flutter
            =================================================== */
         class 3DConstellationEffect {
             constructor(canvasId, radius = 35) {
@@ -1265,7 +1206,7 @@
                 if (!this.canvas) return;
                 this.ctx = this.canvas.getContext('2d');
                 this.radius = radius;
-                this.numPoints = 38;
+                this.numPoints = 40;
                 this.vertices = [];
                 this.time = 0;
                 this.initVertices();
@@ -1275,7 +1216,6 @@
             }
 
             resize() {
-                const rect = this.canvas.parentElement.getBoundingClientRect();
                 const dpr = window.devicePixelRatio || 1;
                 this.width = this.canvas.offsetWidth || 100;
                 this.height = this.canvas.offsetHeight || 100;
@@ -1297,7 +1237,7 @@
             }
 
             animate(timestamp) {
-                this.time = timestamp * 0.0006;
+                this.time = timestamp * 0.0005;
                 this.ctx.clearRect(0, 0, this.width, this.height);
 
                 const cx = this.width / 2;
@@ -1327,19 +1267,19 @@
                     let y3 = y2;
                     let z3 = -x2 * Math.sin(rotY) + z2 * Math.cos(rotY);
 
-                    // Perspective
+                    // Perspective projection
                     let dist = 3.0;
                     let zProj = dist / (dist - z3);
 
                     let px = cx + x3 * this.radius * zProj;
                     let py = cy + y3 * this.radius * zProj;
 
-                    let color = (v.colorIdx === 0) ? '#FF7700' : '#00D4FF';
+                    let color = (v.colorIdx === 0) ? '#FF8C00' : '#00D4FF';
 
                     projected.push({ x: px, y: py, z: z3, color });
                 }
 
-                // Draw lines between close points
+                // Connect closest points
                 for (let i = 0; i < projected.length; i++) {
                     for (let j = i + 1; j < projected.length; j++) {
                         let p1 = projected[i];
@@ -1350,7 +1290,6 @@
                         let dx = p1.x - p2.x;
                         let dy = p1.y - p2.y;
                         let d = Math.sqrt(dx * dx + dy * dy);
-
                         let maxDist = this.radius * 0.85;
 
                         if (d < maxDist) {
@@ -1362,14 +1301,14 @@
                             this.ctx.beginPath();
                             this.ctx.moveTo(p1.x, p1.y);
                             this.ctx.lineTo(p2.x, p2.y);
-                            this.ctx.strokeStyle = (p1.color === '#FF7700') ? `rgba(255, 119, 0, ${finalAlpha})` : `rgba(0, 212, 255, ${finalAlpha})`;
+                            this.ctx.strokeStyle = (p1.color === '#FF8C00') ? `rgba(255, 140, 0, ${finalAlpha})` : `rgba(0, 212, 255, ${finalAlpha})`;
                             this.ctx.lineWidth = 1;
                             this.ctx.stroke();
                         }
                     }
                 }
 
-                // Draw Nodes
+                // Draw glowing nodes
                 for (let i = 0; i < projected.length; i++) {
                     let p = projected[i];
                     let alpha = Math.max(0.2, Math.min(1.0, (p.z + 1) / 2));
@@ -1377,7 +1316,7 @@
 
                     this.ctx.beginPath();
                     this.ctx.arc(p.x, p.y, size * 1.4, 0, Math.PI * 2);
-                    this.ctx.fillStyle = (p.color === '#FF7700') ? `rgba(255, 119, 0, ${alpha * 0.8})` : `rgba(0, 212, 255, ${alpha * 0.8})`;
+                    this.ctx.fillStyle = (p.color === '#FF8C00') ? `rgba(255, 140, 0, ${alpha * 0.8})` : `rgba(0, 212, 255, ${alpha * 0.8})`;
                     this.ctx.fill();
 
                     this.ctx.beginPath();
@@ -1390,79 +1329,40 @@
             }
         }
 
-        // Initialize Constellations on page load
         window.addEventListener('load', () => {
-            new 3DConstellationEffect('navConstellationCanvas', 30);
+            new 3DConstellationEffect('navConstellationCanvas', 28);
             new 3DConstellationEffect('heroConstellationCanvas', 115);
             new 3DConstellationEffect('footerConstellationCanvas', 45);
         });
 
         /* ===================================================
-           INTERACTIONS BOUTONS ET SIMULATEURS
+           3. BASCOULEMENT DES VUES DANS L'ESPACE TOURNOIS
            =================================================== */
-        
-        // Commutation des phases Tuile Tournois
-        function switchTourneyState(state) {
-            document.querySelectorAll('#tourney-tuile .state-btn').forEach(b => b.classList.remove('active', 'green', 'orange'));
-            document.getElementById('mockup-tourney-open').style.display = 'none';
-            document.getElementById('mockup-tourney-cd').style.display = 'none';
-            document.getElementById('mockup-tourney-ongoing').style.display = 'none';
+        function showTourneyView(view) {
+            document.querySelectorAll('#tourney-space .tab-btn').forEach(b => b.classList.remove('active', 'orange'));
+            document.getElementById('view-order').style.display = 'none';
+            document.getElementById('view-rank').style.display = 'none';
+            document.getElementById('view-matches').style.display = 'none';
+            document.getElementById('view-replay').style.display = 'none';
 
-            if(state === 'open') {
-                document.getElementById('mockup-tourney-open').style.display = 'block';
-                event.currentTarget.classList.add('active', 'green');
-            } else if(state === 'countdown') {
-                document.getElementById('mockup-tourney-cd').style.display = 'block';
-                event.currentTarget.classList.add('active', 'orange');
-            } else if(state === 'ongoing') {
-                document.getElementById('mockup-tourney-ongoing').style.display = 'block';
-                event.currentTarget.classList.add('active');
+            if(view === 'order') {
+                document.getElementById('view-order').style.display = 'block';
+                document.getElementById('btn-order').classList.add('active');
+            } else if(view === 'rank') {
+                document.getElementById('view-rank').style.display = 'block';
+                document.getElementById('btn-rank').classList.add('active');
+            } else if(view === 'matches') {
+                document.getElementById('view-matches').style.display = 'block';
+                document.getElementById('btn-matches').classList.add('active');
+            } else if(view === 'replay') {
+                document.getElementById('view-replay').style.display = 'block';
+                document.getElementById('btn-replay').classList.add('active');
             }
         }
 
-        // Commutation des phases Tuile Live WebTV
-        function switchLiveState(state) {
-            document.querySelectorAll('#live-tuile .state-btn').forEach(b => b.classList.remove('active', 'orange'));
-            document.getElementById('mockup-live-on').style.display = 'none';
-            document.getElementById('mockup-live-cd').style.display = 'none';
-            document.getElementById('mockup-live-off').style.display = 'none';
-
-            if(state === 'live') {
-                document.getElementById('mockup-live-on').style.display = 'block';
-                event.currentTarget.classList.add('active', 'orange');
-            } else if(state === 'scheduled') {
-                document.getElementById('mockup-live-cd').style.display = 'block';
-                event.currentTarget.classList.add('active');
-            } else if(state === 'off') {
-                document.getElementById('mockup-live-off').style.display = 'block';
-                event.currentTarget.classList.add('active');
-            }
-        }
-
-        // Commutation des rubriques de la page Tournois
-        function switchTourneyTab(tab) {
-            document.querySelectorAll('#tourney-details .state-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('detail-order').style.display = 'none';
-            document.getElementById('detail-rank').style.display = 'none';
-            document.getElementById('detail-matches').style.display = 'none';
-            document.getElementById('detail-replay').style.display = 'none';
-
-            if(tab === 'order') {
-                document.getElementById('detail-order').style.display = 'block';
-                document.getElementById('btn-tab-order').classList.add('active');
-            } else if(tab === 'rank') {
-                document.getElementById('detail-rank').style.display = 'block';
-                document.getElementById('btn-tab-rank').classList.add('active');
-            } else if(tab === 'matches') {
-                document.getElementById('detail-matches').style.display = 'block';
-                document.getElementById('btn-tab-matches').classList.add('active');
-            } else if(tab === 'replay') {
-                document.getElementById('detail-replay').style.display = 'block';
-                document.getElementById('btn-tab-replay').classList.add('active');
-            }
-        }
-
-        // Fonctions de partage
+        /* ===================================================
+           4. FONCTIONS DE PARTAGE DU BOUTON BOUCHE-A-OREILLE
+           =================================================== */
         function copyLink() {
             const url = "https://esportastt-bot.github.io/astt-app/";
             navigator.clipboard.writeText(url).then(() => {
@@ -1474,8 +1374,8 @@
 
         function shareApp() {
             const shareData = {
-                title: 'ASTT E-Sport — App Safran Helicopter Engines',
-                text: 'Rejoins l\'application officielle ASTT E-Sport ! Suis les tournois en direct, les scores et la WebTV entre collègues de Safran Tarnos.',
+                title: 'ASTT E-Sport — Application Safran Helicopter Engines',
+                text: 'Rejoins l\'application officielle ASTT E-Sport ! Suis les tournois en direct, l\'ordre des matchs et les diffusions WebTV entre collègues.',
                 url: 'https://esportastt-bot.github.io/astt-app/'
             };
             
