@@ -1464,7 +1464,10 @@
             };
             
             if (navigator.share) {
-                navigator.share(shareData).catch(err => console.log(err));
+                navigator.share(shareData).catch(err => {
+                    console.log(err);
+                    copyLink();
+                });
             } else {
                 copyLink();
             }
