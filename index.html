@@ -982,37 +982,34 @@
                 Découvrez la structure exacte de l'application. Les cartes interactives s'affichent automatiquement sur votre écran d'accueil en fonction des événements de la section.
             </p>
 
-            <!-- 1. DUO DE TUILES PROGRAMMÉES (SCHEDULEDEVENTCARD) -->
-            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px;">
-                <i class="fas fa-clock" style="color: var(--bleu);"></i> 1. Tuiles d'Événements Programmés (Compte à Rebours & Rappel)
+            <!-- 3. TUILE INSCRIPTION TOURNOI (TOURNAMENTCARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px; margin-top: 40px;">
+                <i class="fas fa-file-pen" style="color: var(--orange);"></i> 1. La Tuile "INSCRIPTIONS TOURNOI"
             </div>
             <p class="mockup-desc" style="font-size: 0.88rem; margin-bottom: 18px;">
-                Lorsqu'un live ou un tournoi est planifié, deux tuiles compactes se placent côte à côte sous le logo avec décompte temps réel et un bouton pour planifier l'alerte sur votre téléphone :
+                Avertit que les inscriptions pour un nouveau tournoi sont ouvertes. Affiche un décompte avant la date limite et permet de s'inscrire en un clic :
             </p>
 
-            <div class="scheduled-row">
-                <div class="scheduled-card">
-                    <div class="scheduled-header" style="color: var(--bleu);">
-                        <i class="fas fa-video"></i> LIVE WEBTV
-                    </div>
-                    <div class="scheduled-title">Grande Finale Rocket League</div>
-                    <div class="countdown-text">01j 04h 15m 30s</div>
-                    <button class="rappel-btn" onclick="showToast('Rappel de Live ajouté au calendrier !')">
-                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
-                    </button>
+            <div class="flutter-glass-card" style="border-color: rgba(255, 140, 0, 0.4);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="background: rgba(255, 140, 0, 0.2); color: var(--orange); font-family: 'Chakra Petch'; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 4px;">
+                        INSCRIPTIONS TOURNOI
+                    </span>
+                    <span style="font-size: 0.78rem; color: #fff; display: flex; align-items: center; gap: 4px;">
+                        <i class="fas fa-hourglass-half" style="color: var(--orange);"></i> Fin dans : 02j 14h
+                    </span>
                 </div>
-                <div class="scheduled-card tourney">
-                    <div class="scheduled-header" style="color: var(--orange);">
-                        <i class="fas fa-trophy"></i> TOURNOI ASTT
-                    </div>
-                    <div class="scheduled-title">Tournoi FC24 / FIFA</div>
-                    <div class="countdown-text">03j 12h 40m 10s</div>
-                    <button class="rappel-btn orange" onclick="showToast('Rappel de Tournoi ajouté au calendrier !')">
-                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
-                    </button>
+                <div style="font-family: 'Chakra Petch'; font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
+                    Saison 1 : Tournoi EVA
+                </div>
+                <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 12px;">
+                    Les inscriptions pour le prochain tournoi ASTT sont ouvertes à tous les salariés ! Places limitées.
+                </div>
+                <div style="text-align: center; font-size: 0.75rem; color: var(--orange); font-style: italic;">
+                    Cliquez pour ouvrir la fiche détaillée et s'inscrire
                 </div>
             </div>
-
+        
             <!-- 2. TUILE LIVE EN DIRECT (LIVECARD) -->
             <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px; margin-top: 40px;">
                 <i class="fas fa-broadcast-tower" style="color: var(--rouge);"></i> 2. La Tuile "EN DIRECT" (LiveCard Twitch)
@@ -1037,34 +1034,39 @@
                 </button>
             </div>
 
-            <!-- 3. TUILE INSCRIPTION TOURNOI (TOURNAMENTCARD) -->
-            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px; margin-top: 40px;">
-                <i class="fas fa-file-pen" style="color: var(--orange);"></i> 3. La Tuile "INSCRIPTIONS TOURNOI"
+            
+            <!-- 1. DUO DE TUILES PROGRAMMÉES (SCHEDULEDEVENTCARD) -->
+            <div style="font-family: 'Chakra Petch'; color: #fff; font-size: 1.1rem; margin-bottom: 12px;">
+                <i class="fas fa-clock" style="color: var(--bleu);"></i> 3. Tuiles d'Événements Programmés (Compte à Rebours & Rappel)
             </div>
             <p class="mockup-desc" style="font-size: 0.88rem; margin-bottom: 18px;">
-                Avertit que les inscriptions pour un nouveau tournoi sont ouvertes. Affiche un décompte avant la date limite et permet de s'inscrire en un clic :
+                Lorsqu'un live ou un tournoi est planifié, deux tuiles compactes se placent côte à côte sous le logo avec décompte temps réel et un bouton pour planifier l'alerte sur votre téléphone :
             </p>
 
-            <div class="flutter-glass-card" style="border-color: rgba(255, 140, 0, 0.4);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span style="background: rgba(255, 140, 0, 0.2); color: var(--orange); font-family: 'Chakra Petch'; font-size: 0.72rem; font-weight: 800; padding: 4px 10px; border-radius: 4px;">
-                        INSCRIPTIONS TOURNOI
-                    </span>
-                    <span style="font-size: 0.78rem; color: #fff; display: flex; align-items: center; gap: 4px;">
-                        <i class="fas fa-hourglass-half" style="color: var(--orange);"></i> Fin dans : 02j 14h
-                    </span>
+            <div class="scheduled-row">
+                <div class="scheduled-card">
+                    <div class="scheduled-header" style="color: var(--bleu);">
+                        <i class="fas fa-video"></i> LIVE WEBTV
+                    </div>
+                    <div class="scheduled-title">Grande Finale EVA</div>
+                    <div class="countdown-text">01j 04h 15m 30s</div>
+                    <button class="rappel-btn" onclick="showToast('Rappel de Live ajouté au calendrier !')">
+                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
+                    </button>
                 </div>
-                <div style="font-family: 'Chakra Petch'; font-size: 1.1rem; font-weight: 800; color: #fff; margin-bottom: 6px;">
-                    Saison 1 : Tournoi Rocket League 3v3
-                </div>
-                <div style="font-size: 0.85rem; color: rgba(255, 255, 255, 0.7); margin-bottom: 12px;">
-                    Les inscriptions pour le prochain tournoi ASTT sont ouvertes à tous les salariés ! Places limitées.
-                </div>
-                <div style="text-align: center; font-size: 0.75rem; color: var(--orange); font-style: italic;">
-                    Cliquez pour ouvrir la fiche détaillée et s'inscrire
+                <div class="scheduled-card tourney">
+                    <div class="scheduled-header" style="color: var(--orange);">
+                        <i class="fas fa-trophy"></i> TOURNOI ASTT
+                    </div>
+                    <div class="scheduled-title">Tournoi EVA - Niveau Confirmé</div>
+                    <div class="countdown-text">03j 12h 40m 10s</div>
+                    <button class="rappel-btn orange" onclick="showToast('Rappel de Tournoi ajouté au calendrier !')">
+                        <i class="fas fa-calendar-plus"></i> Rappel Agenda
+                    </button>
                 </div>
             </div>
-        </div>
+
+            </div>
 
         <!-- SECTION 2: L'ESPACE DÉDIÉ TOURNOIS -->
         <div id="tourney-space" class="section-header animate-on-scroll">
@@ -1081,7 +1083,7 @@
                 <!-- Header de la Fiche Tournoi (Menu déroulant + Bouton Replay) -->
                 <div class="ts-header">
                     <div class="ts-dropdown">
-                        Tournoi Rocket League 3v3 (En cours) <i class="fas fa-chevron-down"></i>
+                        Tournoi EVA - Niveau Débutant (En cours) <i class="fas fa-chevron-down"></i>
                     </div>
                     <button class="flutter-btn-cyan" style="background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.5); color: #FF3B30; box-shadow: none; max-width: 320px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 10px;">
                         <i class="fab fa-youtube" style="font-size: 1.2rem;"></i> REVOIR LE CAST (YOUTUBE)
@@ -1148,7 +1150,7 @@
                     
                     <!-- Match 1 (Terminé avec scores) -->
                     <div class="match-card">
-                        <div class="match-order">Match 1 — Format BO3 <span style="float:right; color: var(--vert); font-size:0.75rem;">✓ Terminé</span></div>
+                        <div class="match-order">Match 1 — Match EVA (BO3) <span style="float:right; color: var(--vert); font-size:0.75rem;">✓ Terminé</span></div>
                         <div class="match-teams">
                             <span style="text-align: right;">Turbo Strikers <strong style="color: var(--vert); font-size: 1.2rem; margin-left:8px;">2</strong></span>
                             <span class="vs">VS</span>
@@ -1161,7 +1163,7 @@
                     
                     <!-- Match 2 (A venir, affiche juste l'ordre) -->
                     <div class="match-card" style="border-color: rgba(255, 140, 0, 0.4);">
-                        <div class="match-order">Match 2 — Format BO3 <span style="float:right; color: var(--orange); font-size:0.75rem;">▶ En attente</span></div>
+                        <div class="match-order">Match 2 — Match EVA (BO3) <span style="float:right; color: var(--orange); font-size:0.75rem;">▶ En attente</span></div>
                         <div class="match-teams">
                             <span style="text-align: right;">Équipe Rotor Tarnos</span>
                             <span class="vs">VS</span>
@@ -1174,7 +1176,7 @@
                     
                     <!-- Match 3 (A venir) -->
                     <div class="match-card" style="opacity: 0.7;">
-                        <div class="match-order">Match 3 — Format BO5 (FINALE)</div>
+                        <div class="match-order">Match 3 — Match EVA (BO5) (FINALE)</div>
                         <div class="match-teams">
                             <span style="text-align: center; width: 100%; color: var(--text-muted);">Vainqueur M1 &nbsp;&nbsp;<span class="vs">VS</span>&nbsp;&nbsp; Vainqueur M2</span>
                         </div>
